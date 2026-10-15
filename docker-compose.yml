@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shopkart-app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongo:27017/shopkart
+      - JWT_SECRET=shopkart_production_secret_key_2026
+      - RAZORPAY_KEY_ID=rzp_test_1DP5mmOlF5G5ag
+      - RAZORPAY_KEY_SECRET=sD92n7F8eW43kLp0XyZmQ1vA
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6-jammy
+    container_name: shopkart-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
